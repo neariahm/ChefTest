@@ -12,6 +12,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.spoonacular.com/recipes/"
@@ -29,13 +30,13 @@ private val networkLoggingInterceptor =
         .baseUrl(BASE_URL)
         .build()
 
+// suspend functions are core to coroutines which handle async work (wont block the main thread)
     interface ChefTestService {
-        @GET ("findByIngredients?apiKey=$apiKey&number=15")
+        @GET ("findByIngredients?apiKey=$apiKey&number=15&ranking=2")
         suspend fun getChefRecipes(@Query("ingredients") ingredient: String): List<ChefRecipes>
 
-       /* @GET ("645418/summary")
-        fun getRecipeSummary(): RecipeSummary */
-
+        @GET ("{id}/summary?apiKey=$apiKey")
+        suspend fun getRecipeSummary(@Path("id") id: Int): RecipeSummary
     }
 // Exposes the Retrofit service to the rest of the app
     object ChefApi {
